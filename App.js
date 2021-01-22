@@ -18,7 +18,11 @@ import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {StoreProvider} from './context/storeContext';
 import {Home} from './components/home';
 import {ListaCategorias} from './components/listaCategorias';
+import {MenuCompradores} from './components/compradoresMenu'
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
+import {CrearYModificarcomprador} from './components/crearYmodificarComprador'
+import {VerCompradores} from './components/verCompradores'
+import {AsignarComprador} from './components/asignarComprador'
 
 const Stack = createStackNavigator();
 
@@ -27,6 +31,11 @@ export const screens = {
   detalle: 'Detalle de Producto',
   homepage: 'Pagina Principal',
   listaCategorias: 'Categorias',
+  menuCompradores: 'Compradores',
+  crearComprador: 'Crear Comprador',
+  verCompradores : 'Ver Compradores',
+  modificarComprador: 'Modificar Comprador',
+  asignarComprador: 'Asignar Comprador'
 };
 
 const App = () => {
@@ -37,18 +46,16 @@ const App = () => {
         <NavigationContainer>
           <StatusBar barStyle="dark-content" />
           <Stack.Navigator>
-            <Stack.Screen
-              initial={true}
-              name={screens.homepage}
-              options={{headerShown: false}}
-              component={Home}
-            />
+            <Stack.Screen initial={true}name={screens.homepage}options={{headerShown: false}} component={Home}/>
             <Stack.Screen name={screens.listar} component={Listar} />
             <Stack.Screen name={screens.detalle} component={Detalle} />
-            <Stack.Screen
-              name={screens.listaCategorias}
-              component={ListaCategorias}
-            />
+            <Stack.Screen name={screens.listaCategorias}component={ListaCategorias} />
+            <Stack.Screen name={screens.menuCompradores} component={MenuCompradores}/>
+            <Stack.Screen name={screens.crearComprador} component={CrearYModificarcomprador}/>
+            <Stack.Screen name={screens.verCompradores} component={VerCompradores} />
+            <Stack.Screen name={screens.modificarComprador} component={CrearYModificarcomprador} />
+            <Stack.Screen name={screens.asignarComprador} component={AsignarComprador} />
+
           </Stack.Navigator>
         </NavigationContainer>
       </StoreProvider>

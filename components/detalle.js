@@ -1,13 +1,109 @@
 import React, {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, Image, StyleSheet, Text as TextNative} from 'react-native';
-import {Text, Button, Icon} from '@ui-kitten/components';
+import {Text, Button, Icon,Select, IndexPath, SelectItem, Layout} from '@ui-kitten/components';
 import {StoreContext} from '../context/storeContext';
 import {FlatList} from 'react-native-gesture-handler';
 import BottomSheetModal from './bottomSheetModal';
 import SeleccionarCategoria from './seleccionarCategoria';
 
+
+const Detalle = ({route: {params}, ...props}) => {
+  const navigator = useNavigation();
+  const {producto} = params;
+  const {obtenerCategoriasDelProducto,compradores} = useContext(StoreContext);
+  const categorias = obtenerCategoriasDelProducto(producto);
+  const [categoriasModal, setCategoriasModal] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState();
+  const [displayValue, setDisplayValue] = useState('')
+  
+
+
+  return (
+    <View style={styles.container}>
+      <BottomSheetModal
+        visible={categoriasModal}
+        onClosePressed={() => setCategoriasModal(false)}
+        title="Seleccionar Categoria">
+        <SeleccionarCategoria producto={producto} />
+      </BottomSheetModal>
+      <Text category="h4">{producto.title}</Text>
+      <View style={[styles.contenedorImgPrecio]}>
+        <Image
+          style={styles.logo}
+          source={{
+            uri: producto.thumbnail,
+          }}
+        />
+        <View style={styles.infoProducto}>
+          <TextNative style={styles.text}>
+            Estado: {producto.condition}
+          </TextNative>
+          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10}}>
+            <Icon style={styles.icon} fill="#00a650" name="car-outline" />
+            <TextNative style={styles.textEnvio}>
+              Llega gratis el{' '}
+              <TextNative style={{fontWeight: 'bold'}}>Miércoles</TextNative>
+            </TextNative>
+          </View>
+          <TextNative style={styles.text}>
+            Forma de pago: {'\n' + producto.installments.quantity} cuotas de{' '}
+            {producto.installments.amount}
+          </TextNative>
+          <TextNative style={styles.textPrice}>
+            ${producto.price}{' '}
+            <TextNative style={styles.textPriceDiscount}>
+              {100 - producto.installments.rate}% Off
+            </TextNative>
+          </TextNative>
+        </View>
+      </View>
+      <Text>Categorias:</Text>
+      <FlatList
+        data={categorias}
+        horizontal
+        renderItem={({item}) => (
+          <View style={[styles.chip, {backgroundColor: item.color}]}>
+            <Text>{item.nombre}</Text>
+          </View>
+        )}
+      />
+   
+      <View style={styles.form}>
+        <Button
+          appearance="outline"
+          style={styles.btnVolver}
+          onPress={() => {
+            setCategoriasModal(true);
+          }}>
+          MODIFICAR CATEGORIAS
+        </Button>
+        <View style={styles.buttons}>
+          <Button
+            appearance="outline"
+            style={styles.btnVolver}
+            onPress={() => {
+              navigator.goBack();
+            }}>
+            VOLVER
+          </Button>
+          <Button
+            status="success"
+            style={styles.btnGuardar}
+            onPress={() => {
+              navigator.goBack();
+            }}>
+            GUARDAR
+          </Button>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
+  layout: {
+  },
   container: {
     flex: 1,
     justifyContent: 'space-between',
@@ -91,92 +187,5 @@ const styles = StyleSheet.create({
   },
 });
 
-const Detalle = ({route: {params}, ...props}) => {
-  const navigator = useNavigation();
-  const {producto} = params;
-  const {obtenerCategoriasDelProducto} = useContext(StoreContext);
-  const categorias = obtenerCategoriasDelProducto(producto);
-  const [categoriasModal, setCategoriasModal] = useState(false);
-
-  return (
-    <View style={styles.container}>
-      <BottomSheetModal
-        visible={categoriasModal}
-        onClosePressed={() => setCategoriasModal(false)}
-        title="Seleccionar Categoria">
-        <SeleccionarCategoria producto={producto} />
-      </BottomSheetModal>
-      <Text category="h4">{producto.title}</Text>
-      <View style={[styles.contenedorImgPrecio]}>
-        <Image
-          style={styles.logo}
-          source={{
-            uri: producto.thumbnail,
-          }}
-        />
-        <View style={styles.infoProducto}>
-          <TextNative style={styles.text}>
-            Estado: {producto.condition}
-          </TextNative>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10}}>
-            <Icon style={styles.icon} fill="#00a650" name="car-outline" />
-            <TextNative style={styles.textEnvio}>
-              Llega gratis el{' '}
-              <TextNative style={{fontWeight: 'bold'}}>Miércoles</TextNative>
-            </TextNative>
-          </View>
-          <TextNative style={styles.text}>
-            Forma de pago: {'\n' + producto.installments.quantity} cuotas de{' '}
-            {producto.installments.amount}
-          </TextNative>
-          <TextNative style={styles.textPrice}>
-            ${producto.price}{' '}
-            <TextNative style={styles.textPriceDiscount}>
-              {100 - producto.installments.rate}% Off
-            </TextNative>
-          </TextNative>
-        </View>
-      </View>
-      <Text>Categorias:</Text>
-      <FlatList
-        data={categorias}
-        horizontal
-        renderItem={({item}) => (
-          <View style={[styles.chip, {backgroundColor: item.color}]}>
-            <Text>{item.nombre}</Text>
-          </View>
-        )}
-      />
-      <View style={styles.form}>
-        <Button
-          appearance="outline"
-          style={styles.btnVolver}
-          onPress={() => {
-            setCategoriasModal(true);
-          }}>
-          MODIFICAR CATEGORIAS
-        </Button>
-        <View style={styles.buttons}>
-          <Button
-            appearance="outline"
-            style={styles.btnVolver}
-            onPress={() => {
-              navigator.goBack();
-            }}>
-            VOLVER
-          </Button>
-          <Button
-            status="success"
-            style={styles.btnGuardar}
-            onPress={() => {
-              navigator.goBack();
-            }}>
-            GUARDAR
-          </Button>
-        </View>
-      </View>
-    </View>
-  );
-};
 
 export default Detalle;

@@ -1,6 +1,9 @@
 import React from 'react';
 import {Button, Card, Text} from '@ui-kitten/components';
 import {StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {screens} from '../App'
+
 
 const styles = StyleSheet.create({
   tituloContainer: {
@@ -24,7 +27,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Tarjeta = ({titulo, precio, onPressVerDetalles}) => {
+const Tarjeta = ({titulo, precio, onPressVerDetalles,onPressComprar}) => {
   return (
     <Card style={styles.card}>
       <View style={styles.tituloContainer}>
@@ -35,7 +38,7 @@ const Tarjeta = ({titulo, precio, onPressVerDetalles}) => {
         <Button appearance="outline" onPress={onPressVerDetalles}>
           Ver Detalles
         </Button>
-        <Button status="success">COMPRAR</Button>
+        <Button status="success" onPress={onPressComprar}>COMPRAR </Button>
       </View>
     </Card>
   );

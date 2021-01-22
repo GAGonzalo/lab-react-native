@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import {useNavigation} from '@react-navigation/native';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {Text} from '@ui-kitten/components';
-import {screens} from '../App';
 import Tarjeta from './tarjeta';
 import {StoreContext} from '../context/storeContext';
+import {screens} from '../App';
+import {useNavigation} from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
 const Listar = ({...props}) => {
   const {productos} = useContext(StoreContext);
   const navigator = useNavigation();
-
   return (
     <View style={styles.container}>
       {productos.length > 0 ? (
@@ -26,6 +25,9 @@ const Listar = ({...props}) => {
               precio={producto.price}
               onPressVerDetalles={() => {
                 navigator.navigate(screens.detalle, {producto});
+              }}
+              onPressComprar={()=>{
+                navigator.navigate(screens.asignarComprador, {producto});
               }}
               key={producto.id}
             />
